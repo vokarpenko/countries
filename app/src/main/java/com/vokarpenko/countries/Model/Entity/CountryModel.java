@@ -2,6 +2,7 @@ package com.vokarpenko.countries.Model.Entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 public class CountryModel {
     @NonNull
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private int id;
 
     public int getId() {
@@ -38,6 +39,11 @@ public class CountryModel {
     private List<CurrencyModel> currencies;
 
 
+    @SerializedName("flag")
+    @Expose
+    private String flag;
+
+
     public List<CurrencyModel> getCurrencies() {
         return currencies;
     }
@@ -47,7 +53,7 @@ public class CountryModel {
     }
 
 
-    private String flag;
+
 
     public String getFlag() {
         return flag;
@@ -60,6 +66,7 @@ public class CountryModel {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }

@@ -1,19 +1,19 @@
 
 package com.vokarpenko.countries.Model.Entity;
 
-import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
 
-@Entity//(indices = {@Index(value = "currencyName", unique = true)})
-public class CurrencyModel {
-    @PrimaryKey(autoGenerate = true)
+
+@Entity
+public class CurrencyModel  {
+    @PrimaryKey
     @NonNull
     private int id;
 
@@ -54,5 +54,18 @@ public class CurrencyModel {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CurrencyModel that = (CurrencyModel) o;
+        return Objects.equals(currencyName, that.currencyName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currencyName);
     }
 }

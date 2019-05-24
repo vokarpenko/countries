@@ -1,5 +1,5 @@
 package com.vokarpenko.countries.Utils;
 
-public interface FailureCallback {
+public interface FailureLoadCallback {
     void setError(Throwable throwable);
 }

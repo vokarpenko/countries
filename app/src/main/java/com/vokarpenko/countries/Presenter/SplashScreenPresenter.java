@@ -1,11 +1,8 @@
 package com.vokarpenko.countries.Presenter;
 
-import com.vokarpenko.countries.Model.Entity.CountryModel;
 import com.vokarpenko.countries.Model.Repository.SplashScreenRepository;
-import com.vokarpenko.countries.Utils.LoadDataCallBack;
-import com.vokarpenko.countries.Utils.FailureCallback;
-
-import java.util.List;
+import com.vokarpenko.countries.Utils.SuccessfulLoadCallBack;
+import com.vokarpenko.countries.Utils.FailureLoadCallback;
 
 public class SplashScreenPresenter {
     private SplashScreenView view;
@@ -18,11 +15,11 @@ public class SplashScreenPresenter {
 
     public void saveData(){
         repository.saveData(
-                new LoadDataCallBack() {
+                new SuccessfulLoadCallBack() {
             @Override
-            public void openMainActivity() {
+            public void openListCountriesActivity() {
                 view.openMainActivity();
-            }},new FailureCallback() {
+            }},new FailureLoadCallback() {
             @Override
             public void setError(Throwable throwable) {
                 view.showErrorMessage(throwable.getMessage());

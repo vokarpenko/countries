@@ -4,6 +4,7 @@ import com.vokarpenko.countries.Model.Entity.CountryModel;
 
 import java.util.List;
 
-public interface MainView {
+public interface ListCountriesView {
     void setList(List<CountryModel> models);
+    void openDetailActivity(int position);
 }

@@ -5,15 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.vokarpenko.countries.Model.Database.AppDatabase;
 import com.vokarpenko.countries.Model.Repository.SplashScreenRepository;
 import com.vokarpenko.countries.Presenter.SplashScreenPresenter;
 import com.vokarpenko.countries.Presenter.SplashScreenView;
 import com.vokarpenko.countries.R;
-
-import static com.vokarpenko.countries.Model.Repository.SplashScreenRepository.PREFS_NAME;
 
 public class SplashScreenActivity extends AppCompatActivity implements SplashScreenView {
     private SplashScreenPresenter presenter = null;
@@ -27,9 +23,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         if (presenter == null) {
             AppDatabase db = AppDatabase.getDatabase(getApplication());
             db.clearAllTables();
-            RequestManager glide = Glide.with(getApplicationContext());
-            SplashScreenRepository repository = new SplashScreenRepository(getSharedPreferences(PREFS_NAME,0),db.country(),glide);
-            //Log.i("myTag",(String.valueOf( repository.hasCache())));
+            SplashScreenRepository repository = new SplashScreenRepository(getBaseContext(),db.country());
             presenter = new SplashScreenPresenter(this,repository);
         }
         presenter.saveData();
@@ -43,6 +37,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
 
     @Override
     public void openMainActivity() {
-        startActivity(new Intent(getBaseContext(),MainActivity.class));
+        startActivity(new Intent(getBaseContext(),ListCountriesActivity.class));
+        finish();
     }
 }

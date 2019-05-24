@@ -8,5 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorLightBackground</item>
     </style>
-
+    <style name="TextStyle">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
 </resources>
