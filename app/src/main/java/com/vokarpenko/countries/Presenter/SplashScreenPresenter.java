@@ -24,6 +24,7 @@ public class SplashScreenPresenter {
         if(!repository.hasCache()) {
             view.showProgressBar();
             repository.getSingleCountriesList()
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(new DisposableSingleObserver<List<CountryModel>>() {
                         @Override
                         public void onSuccess(List<CountryModel> list) {
@@ -31,6 +32,8 @@ public class SplashScreenPresenter {
                         }
                         @Override
                         public void onError(Throwable e) {
+                            view.showErrorMessage(e.getMessage());
+                            view.hideProgressBar();
                         }
                     });
         }

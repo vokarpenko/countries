@@ -23,12 +23,11 @@ public class CurrencyModel  {
     private String code;
     private String symbol;
 
-    @NonNull
     public int getId() {
         return id;
     }
 
-    public void setId(@NonNull int id) {
+    public void setId(int id) {
         this.id = id;
     }
 

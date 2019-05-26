@@ -25,7 +25,7 @@ import static com.vokarpenko.countries.Model.Repository.ListCountriesRepository.
 public class DetailCountryActivity extends AppCompatActivity implements DetailCountryView {
     TextView textCountryName,textCountryCapital;
     RecyclerView listViewCurrencies;
-    DetailCountryPresenter presenter;
+    DetailCountryPresenter presenter=null;
     AppDatabase db;
     CurrenciesAdapter adapter;
     ImageView flagImage;
@@ -34,6 +34,9 @@ public class DetailCountryActivity extends AppCompatActivity implements DetailCo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_country);
         init();
+        if (presenter==null){
+            presenter = new DetailCountryPresenter(this,new DetailCountryRepository(db.country()));
+        }
         presenter.setData();
     }
 
@@ -47,9 +50,6 @@ public class DetailCountryActivity extends AppCompatActivity implements DetailCo
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         listViewCurrencies.setLayoutManager(layoutManager);
         listViewCurrencies.setAdapter(adapter);
-        if (presenter==null){
-            presenter = new DetailCountryPresenter(this,new DetailCountryRepository(db.country()));
-        }
     }
 
     @Override

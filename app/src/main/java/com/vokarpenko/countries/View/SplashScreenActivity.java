@@ -21,9 +21,6 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         init();
-    }
-    private void init(){
-        progressBar = findViewById(R.id.progress_bar);
         if (presenter == null) {
             AppDatabase db = AppDatabase.getDatabase(getApplication());
             SplashScreenRepository repository = new SplashScreenRepository(getBaseContext(),db.country());
@@ -31,11 +28,15 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         }
         presenter.saveData();
     }
+    private void init(){
+
+        progressBar = findViewById(R.id.progress_bar);
+    }
 
 
     @Override
     public void showErrorMessage(String errorMessage) {
-        Toast.makeText(getBaseContext(), "Ошибка " + errorMessage, Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Ошибка соединения " + errorMessage, Toast.LENGTH_LONG).show();
     }
 
     @Override
