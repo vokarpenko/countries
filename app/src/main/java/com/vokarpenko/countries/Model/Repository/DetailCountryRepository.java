@@ -6,28 +6,23 @@ import com.vokarpenko.countries.Model.Entity.CurrencyModel;
 
 import java.util.List;
 
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
+
 public class DetailCountryRepository {
     private CountryDao countryDao;
-    private CountryModel countryModel;
-
-    public void setCountryModel(int index) {
-        this.countryModel = countryDao.getAllCountry().get(index);
-    }
 
     public DetailCountryRepository(CountryDao countryDao) {
         this.countryDao = countryDao;
     }
-    public String getCountryName(){
-        return countryModel.getName();
-    }
-    public String getCountryCapital(){
-        return countryModel.getCapital();
-    }
-    public String getCountryFlag(){
-        return countryModel.getFlag();
-    }
-    public List<CurrencyModel> getListCurrencies(){
-        return countryDao.getListCurrenciesCountry(countryModel.getId());
+
+    public Single<List<CurrencyModel>> getSingleListCurrencies(int index){
+        return countryDao.getListCurrenciesCountry(index)
+                .subscribeOn(Schedulers.io());
     }
 
+    public Single<CountryModel> getSingleCountry(int index){
+        return countryDao.getCountryFromId(index)
+                .subscribeOn(Schedulers.io());
+    }
 }

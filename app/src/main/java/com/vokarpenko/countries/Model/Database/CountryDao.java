@@ -10,6 +10,8 @@ import com.vokarpenko.countries.Model.Entity.CurrencyModel;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 @Dao
 public interface CountryDao {
 
@@ -25,17 +27,16 @@ public interface CountryDao {
         @Insert
         void insertCurrenciesCountries(List<CurrenciesCountries> currenciesCountries);
 
+        //Получение списка валют страны
         @Query("SELECT * FROM CurrencyModel WHERE id in (SELECT idCurrency FROM CurrenciesCountries WHERE idCountry=:idCountry)")
-        List<CurrencyModel> getListCurrenciesCountry(int idCountry);
-
-
+        Single<List<CurrencyModel>> getListCurrenciesCountry(int idCountry);
 
         // Получение всех Country из бд
         @Query("SELECT * FROM CountryModel")
-        List<CountryModel> getAllCountry();
+        Single<List<CountryModel>> getAllCountry();
 
-        /*// Получение всех Country из бд с условием
-        @Query("SELECT name FROM CountryModel WHERE name LIKE :name")
-        String getCapitalCountry(String name);*/
+        // Получение страны по id
+        @Query("SELECT * FROM CountryModel WHERE id =:id")
+        Single<CountryModel> getCountryFromId(int id);
 
     }

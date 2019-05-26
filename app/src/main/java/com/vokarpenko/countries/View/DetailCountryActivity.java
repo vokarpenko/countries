@@ -19,6 +19,7 @@ import com.vokarpenko.countries.Adapter.CurrenciesAdapter;
 
 import java.util.List;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import static com.vokarpenko.countries.Model.Repository.ListCountriesRepository.POSITION;
 
 public class DetailCountryActivity extends AppCompatActivity implements DetailCountryView {
@@ -49,22 +50,17 @@ public class DetailCountryActivity extends AppCompatActivity implements DetailCo
         if (presenter==null){
             presenter = new DetailCountryPresenter(this,new DetailCountryRepository(db.country()));
         }
-
     }
-
 
     @Override
     public void setItem(String nameCountry, String capital, String flag, final List<CurrencyModel> currencies) {
-        GlideApp.with(getApplicationContext()).load(flag)
+        GlideApp.with(getApplicationContext())
+                .load(flag)
+                .transition(withCrossFade())
                 .apply(new RequestOptions().centerCrop()).into(flagImage);
         textCountryName.setText(nameCountry);
         textCountryCapital.setText(capital);
-        listViewCurrencies.post(new Runnable() {
-            @Override
-            public void run() {
-                adapter.setCurrencies(currencies);
-            }
-        });
+        adapter.setCurrencies(currencies);
     }
 
     @Override

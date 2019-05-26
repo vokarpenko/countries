@@ -1,32 +1,32 @@
 package com.vokarpenko.countries.Model.Repository;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-
-import com.caverock.androidsvg.SVG;
-import com.caverock.androidsvg.SVGParseException;
+import com.vokarpenko.countries.Adapter.CountriesAdapter;
 import com.vokarpenko.countries.Model.Database.CountryDao;
 import com.vokarpenko.countries.Model.Entity.CountryModel;
-import com.vokarpenko.countries.Utils.SetDataCallback;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.List;
+import java.util.Observable;
+
+import io.reactivex.Emitter;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
 public class ListCountriesRepository {
     public static final String POSITION = "Position";
     private CountryDao countryDao;
-    private Context context;
-
-    public ListCountriesRepository(CountryDao countryDao, Context context) {
+    private CountriesAdapter adapter;
+    public ListCountriesRepository(CountryDao countryDao, CountriesAdapter adapter) {
         this.countryDao = countryDao;
-        this.context = context;
+        this.adapter=adapter;
     }
 
-    public void getDataFromCache(SetDataCallback setDataCallback){
-        List<CountryModel> countries = countryDao.getAllCountry();
-        setDataCallback.setList(countries);
+    public Single<List<CountryModel>> getSingleDataFromCache(){
+        return countryDao
+                .getAllCountry()
+                .subscribeOn(Schedulers.io());
+    }
+    public io.reactivex.Observable<Integer> getObservableItemClick(){
+        return  adapter.getViewClickedObservable();
     }
 
 }

@@ -2,7 +2,6 @@ package com.vokarpenko.countries.Adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +9,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.vokarpenko.countries.Model.Entity.CountryModel;
-import com.vokarpenko.countries.Presenter.MainPresenter;
+import com.vokarpenko.countries.Presenter.ListCountriesPresenter;
 import com.vokarpenko.countries.R;
 import com.vokarpenko.countries.Utils.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
+import io.reactivex.subjects.PublishSubject;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.ViewHolder> {
     private List<CountryModel> countries = new ArrayList<>();
-    private MainPresenter presenter;
+    private ListCountriesPresenter presenter;
+    private PublishSubject<Integer> mViewClickSubject = PublishSubject.create();
 
-    public CountriesAdapter(MainPresenter presenter) {
+
+    public Observable<Integer> getViewClickedObservable() {
+        return mViewClickSubject;
+    }
+
+    public CountriesAdapter(ListCountriesPresenter presenter) {
         this.presenter = presenter;
     }
     public void setCountries(List<CountryModel> countries) {
@@ -38,11 +50,20 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CountriesAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final CountriesAdapter.ViewHolder viewHolder, int i) {
         viewHolder.countryName.setText(countries.get(i).getName());
         GlideApp.with(viewHolder.itemView.getContext())
                 .load(countries.get(i).getFlag())
-                .apply(new RequestOptions().centerCrop()).into(viewHolder.countryFlag);
+                .transition(withCrossFade())
+                .apply(new RequestOptions().centerCrop())
+                .into(viewHolder.countryFlag);
+        RxView.clicks(viewHolder.itemView)
+                .map(new Function<Object, Integer>() {
+                    @Override
+                    public Integer apply(Object aVoid) {
+                        return viewHolder.getAdapterPosition();
+                    }
+                }).subscribe(mViewClickSubject);
     }
 
 
@@ -55,21 +76,12 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.View
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView countryName;
         ImageView countryFlag;
-        MainPresenter presenter;
-        ViewHolder(@NonNull View itemView, final MainPresenter presenter) {
+        ListCountriesPresenter presenter;
+        ViewHolder(@NonNull final View itemView, final ListCountriesPresenter presenter) {
             super(itemView);
             countryName = itemView.findViewById(R.id.country_name);
             countryFlag = itemView.findViewById(R.id.country_flag);
             this.presenter = presenter;
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.i("myTag",String.valueOf(getAdapterPosition()));
-                    if (presenter != null) {
-                        presenter.onItemClick(getAdapterPosition());
-                    }
-                }
-            });
         }
     }
 }
